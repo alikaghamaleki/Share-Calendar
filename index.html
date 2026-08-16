@@ -2,9 +2,34 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تقویم مشترک ما</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
+  <!-- عنوان برنامه که بالای مرورگر نوشته می‌شود -->
+  <title>تقویم مشترک ما</title>
+
+  <!-- ========================================== -->
+  <!-- تنظیمات نصب به عنوان اپلیکیشن گوشی (PWA) -->
+  <!-- ========================================== -->
+  <!-- نام برنامه زیر آیکون در صفحه اصلی گوشی -->
+  <meta name="apple-mobile-web-app-title" content="تقویم ما">
+  <meta name="application-name" content="تقویم ما">
+  
+  <!-- باز شدن برنامه به صورت تمام‌صفحه (بدون نوار مرورگر) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  
+  <!-- رنگ نوار بالای گوشی (محیط برنامه) -->
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- آیکون برنامه برای iOS (آیفون) و اندروید (یک آیکون تقویم بنفش زیبا و مینیمال) -->
+  <!-- من از یک SVG که به صورت کد درآمده استفاده می‌کنم تا نیاز به آپلود عکس نداشته باشید -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%234f46e5'/%3E%3Crect x='96' y='160' width='320' height='256' rx='32' fill='white'/%3E%3Cpath d='M160 96v64m192-64v64M96 240h320' stroke='white' stroke-width='40' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%234f46e5'/%3E%3Crect x='96' y='160' width='320' height='256' rx='32' fill='white'/%3E%3Cpath d='M160 96v64m192-64v64M96 240h320' stroke='white' stroke-width='40' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  
+  <!-- فایل مانیفست برای نصب شدن در اندروید -->
+  <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22%D8%AA%D9%82%D9%88%DB%8C%D9%85%20%D9%85%D8%B4%D8%AA%D8%B1%DA%A9%20%D9%85%D8%A7%22%2C%22short_name%22%3A%22%D8%AA%D9%82%D9%88%DB%8C%D9%85%20%D9%85%D8%A7%22%2C%22start_url%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f8fafc%22%2C%22theme_color%22%3A%22%234f46e5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%253E%253Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27112%27%20fill%3D%27%25234f46e5%27%2F%253E%253Crect%20x%3D%2796%27%20y%3D%27160%27%20width%3D%27320%27%20height%3D%27256%27%20rx%3D%2732%27%20fill%3D%27white%27%2F%253E%253Cpath%20d%3D%27M160%2096v64m192-64v64M96%20240h320%27%20stroke%3D%27white%27%20stroke-width%3D%2740%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+
   <!-- کتابخانه‌های مورد نیاز (Tailwind و React) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -16,7 +41,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   
-  <style> body { font-family: Tahoma, Arial, sans-serif; background-color: #f8fafc; } </style>
+  <style> body { font-family: Tahoma, Arial, sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; } </style>
 </head>
 <body>
   <div id="root"></div>
@@ -25,7 +50,7 @@
     const { useState, useEffect } = React;
 
     // ==========================================
-    // تنظیمات فایربیس شما (حتماً این بخش را با کدهای خودتان جایگزین کنید)
+    // تنظیمات فایربیس شما
     // ==========================================
     const firebaseConfig = {
   apiKey: "AIzaSyDWYO7WRrjFD5IoDUGm91Fih3KE3bHRWa8",
@@ -37,7 +62,6 @@
   appId: "1:76090950691:web:ac2099a052e4408a43dd96"
 };
 
-    // روشن کردن پایگاه داده
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
@@ -118,7 +142,6 @@
       const [isSyncing, setIsSyncing] = useState(true);
 
       useEffect(() => {
-        // ورود نامرئی به فایربیس
         auth.signInAnonymously().catch(err => console.log("خطا در ورود:", err));
         const unsubscribe = auth.onAuthStateChanged((currentUser) => {
           setUser(currentUser);
@@ -138,7 +161,6 @@
       useEffect(() => {
         if (!user) return;
         setIsSyncing(true);
-        // اتصال به دیتابیس مشترک
         const calendarRef = db.collection('calendars').doc('shared');
         const unsubscribe = calendarRef.onSnapshot((doc) => {
           if (doc.exists) {
@@ -183,25 +205,25 @@
       const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
       return (
-        <div className="min-h-screen p-4 md:p-8 flex justify-center text-slate-800">
-          <div className="w-full max-w-md relative">
-            {isSyncing && <div className="absolute top-0 right-0 left-0 text-center text-xs text-indigo-500 bg-indigo-50 py-1 rounded-full">در حال همگام‌سازی...</div>}
+        <div className="min-h-screen p-4 md:p-8 flex justify-center text-slate-800 safe-area-pt">
+          <div className="w-full max-w-md relative pb-10">
+            {isSyncing && <div className="absolute top-0 right-0 left-0 text-center text-xs text-indigo-500 bg-indigo-50 py-1 rounded-full z-10 shadow-sm border border-indigo-100">در حال همگام‌سازی...</div>}
 
             <div className="flex items-center justify-between mb-8 mt-6">
               <div>
                 <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                  <span className="text-indigo-600"><CalendarIcon /></span> تقویم مشترک ما
+                  <span className="text-indigo-600 bg-indigo-100 p-1.5 rounded-xl"><CalendarIcon /></span> تقویم ما
                 </h1>
                 <p className="text-sm text-slate-500 mt-1">دفترچه خاطرات دو نفره</p>
               </div>
-              <button onClick={() => todayDate.length && (setViewYear(todayDate[0]), setViewMonth(todayDate[1]))} className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-full text-sm font-medium hover:bg-indigo-100 transition">امروز</button>
+              <button onClick={() => todayDate.length && (setViewYear(todayDate[0]), setViewMonth(todayDate[1]))} className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-full text-sm font-medium hover:bg-indigo-100 transition shadow-sm active:scale-95">امروز</button>
             </div>
 
-            <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-6 mb-6">
+            <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-5 md:p-6 mb-6">
               <div className="flex items-center justify-between mb-6">
-                <button onClick={() => viewMonth === 1 ? (setViewMonth(12), setViewYear(viewYear - 1)) : setViewMonth(viewMonth - 1)} className="p-2 hover:bg-slate-100 rounded-full"><ChevronRight /></button>
+                <button onClick={() => viewMonth === 1 ? (setViewMonth(12), setViewYear(viewYear - 1)) : setViewMonth(viewMonth - 1)} className="p-2 hover:bg-slate-100 rounded-full active:bg-slate-200 transition"><ChevronRight /></button>
                 <h2 className="text-lg font-bold">{persianMonths[viewMonth - 1]} {viewYear}</h2>
-                <button onClick={() => viewMonth === 12 ? (setViewMonth(1), setViewYear(viewYear + 1)) : setViewMonth(viewMonth + 1)} className="p-2 hover:bg-slate-100 rounded-full"><ChevronLeft /></button>
+                <button onClick={() => viewMonth === 12 ? (setViewMonth(1), setViewYear(viewYear + 1)) : setViewMonth(viewMonth + 1)} className="p-2 hover:bg-slate-100 rounded-full active:bg-slate-200 transition"><ChevronLeft /></button>
               </div>
 
               <div className="grid grid-cols-7 gap-1 mb-2">
@@ -223,11 +245,11 @@
                   const isHoliday = isFriday || isEventHoliday;
                   const hasOccasion = dayEvents.length > 0;
 
-                  let btnClasses = "relative flex flex-col items-center justify-center aspect-square rounded-2xl text-sm font-medium transition-all ";
+                  let btnClasses = "relative flex flex-col items-center justify-center aspect-square rounded-2xl text-sm font-medium transition-all select-none ";
                   if (isSelected) btnClasses += isHoliday ? "bg-red-500 text-white shadow-md shadow-red-200 " : "bg-indigo-600 text-white shadow-md shadow-indigo-200 ";
                   else {
                     btnClasses += isHoliday ? "text-red-500 " : "text-slate-700 ";
-                    btnClasses += (hasEntryText || entryMood) ? "bg-slate-100 " : "hover:bg-slate-100 ";
+                    btnClasses += (hasEntryText || entryMood) ? "bg-slate-100 " : "hover:bg-slate-100 active:bg-slate-200 ";
                     if (isToday) btnClasses += "border-2 border-indigo-500 ";
                   }
 
@@ -253,21 +275,21 @@
             </div>
 
             {isEditorOpen && (
-              <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 backdrop-blur-sm p-4 sm:items-center">
-                <div className="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl">
+              <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/60 backdrop-blur-sm sm:items-center">
+                <div className="bg-white w-full max-w-md rounded-t-[2rem] sm:rounded-3xl p-6 shadow-2xl pb-10 sm:pb-6 animate-in slide-in-from-bottom-10 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200">
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-bold text-lg text-slate-800">یادداشت روز {selectedDate?.day} {persianMonths[selectedDate?.month - 1]}</h3>
-                    <button onClick={() => setIsEditorOpen(false)} className="p-2 hover:bg-slate-100 rounded-full"><XIcon /></button>
+                    <h3 className="font-bold text-lg text-slate-800">روز {selectedDate?.day} {persianMonths[selectedDate?.month - 1]}</h3>
+                    <button onClick={() => setIsEditorOpen(false)} className="p-2 bg-slate-100 hover:bg-slate-200 rounded-full active:scale-90 transition"><XIcon /></button>
                   </div>
                   
                   <div className="mb-5">
-                    <label className="text-sm font-medium text-slate-600 mb-2 block">حال و هوای امروز:</label>
+                    <label className="text-sm font-medium text-slate-600 mb-2 block">حست در این روز:</label>
                     <div className="flex flex-wrap gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-100 justify-center">
                       {Object.entries(MOOD_ICONS).map(([key, config]) => {
                         const Icon = config.icon;
                         const isSelected = currentMood === key;
                         return (
-                          <button key={key} onClick={() => setCurrentMood(isSelected ? null : key)} className={`p-2 rounded-xl transition-all duration-200 flex flex-col items-center justify-center ${isSelected ? 'bg-white ring-2 ring-indigo-500 scale-110 shadow-md' : 'hover:bg-slate-200 opacity-60 hover:opacity-100'}`} title={config.label}>
+                          <button key={key} onClick={() => setCurrentMood(isSelected ? null : key)} className={`p-2 rounded-xl transition-all duration-200 flex flex-col items-center justify-center ${isSelected ? 'bg-white ring-2 ring-indigo-500 scale-110 shadow-md' : 'hover:bg-slate-200 opacity-60 hover:opacity-100 active:scale-95'}`} title={config.label}>
                             <Icon className={`w-7 h-7 ${config.color}`} />
                           </button>
                         );
@@ -275,10 +297,10 @@
                     </div>
                   </div>
 
-                  <textarea value={currentNote} onChange={(e) => setCurrentNote(e.target.value)} placeholder="امروز چه کارهایی انجام دادی؟ چطور گذشت؟..." className="w-full h-32 p-4 bg-slate-50 border border-slate-200 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4 text-sm"></textarea>
+                  <textarea value={currentNote} onChange={(e) => setCurrentNote(e.target.value)} placeholder="خاطره، کارها یا حرفی که میخوای بنویسی..." className="w-full h-32 p-4 bg-slate-50 border border-slate-200 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white mb-4 text-sm transition"></textarea>
                   
-                  <button onClick={saveNote} className="w-full py-3 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700">
-                    <CheckIcon /> ثبت یادداشت
+                  <button onClick={saveNote} className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 active:scale-95 transition shadow-lg shadow-indigo-500/30">
+                    <CheckIcon /> ذخیره خاطره
                   </button>
                 </div>
               </div>
@@ -291,6 +313,14 @@
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
+  
+  <style>
+    /* تنظیمات برای بهتر شدن تجربه کاربری در موبایل */
+    @supports (padding-top: env(safe-area-inset-top)) {
+      .safe-area-pt { padding-top: calc(env(safe-area-inset-top) + 1rem); }
+    }
+  </style>
 </body>
 </html>
+
 
